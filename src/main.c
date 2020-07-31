@@ -170,6 +170,12 @@ int main(int argc, char* argv[])
     }
 
     // Clean up
+    if (state.buttons[btn_file].label.texture != NULL)
+    {
+        SDL_DestroyTexture(state.buttons[btn_file].label.texture);
+    }
+    TTF_CloseFont(state.font);
+
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     TTF_Quit();

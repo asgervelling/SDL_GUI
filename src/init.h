@@ -2,7 +2,7 @@
 #define INIT
 
 SDL_Color init_color(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-Rect init_rect(Rect rect, int x, int y, int w, int h);
+SDL_Rect init_rect(SDL_Rect rect, int x, int y, int w, int h);
 Button_TTF init_button_TTF(int x,
                            int y,
                            int w,

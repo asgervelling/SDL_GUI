@@ -3,9 +3,9 @@
 
 #include "structs.h"
 
-Rect init_rect(int x, int y, int w, int h)
+SDL_Rect init_rect(int x, int y, int w, int h)
 {
-    Rect rect;
+    SDL_Rect rect;
     rect.x = x;
     rect.y = y;
     rect.w = w;
@@ -25,13 +25,14 @@ void init_font(State *state)
 
 void put_text_on_button(State *state, SDL_Renderer *renderer, Button_TTF button, char text[])
 {
-    int margin = 6;
     SDL_Surface *temp = TTF_RenderText_Blended(state->font, text, state->colors.black);
-    button.label.rect = init_rect(button.rect.x + margin,
-                                  button.rect.y + margin,
-                                  button.rect.w - 2*margin,
-                                  button.rect.h - 2*margin);
+    
     button.label.texture = SDL_CreateTextureFromSurface(renderer, temp);
+    printf("                test label rect: %d %d %d %d\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+                                                    state->buttons[btn_file].label.rect.x,
+                                                    state->buttons[btn_file].label.rect.y,
+                                                    state->buttons[btn_file].label.rect.w,
+                                                    state->buttons[btn_file].label.rect.h);
     SDL_FreeSurface(temp);
 }
 
@@ -54,7 +55,11 @@ Button_TTF init_button_TTF(int x, int y, int w, int h)
 {
     Button_TTF button_TTF;
     button_TTF.rect = init_rect(x, y, w, h);
-    button_TTF.margin = 6;
+    int margin = 6;
+    button_TTF.label.rect = init_rect(x + margin,
+                                      y + margin,
+                                      w - 2 * margin,
+                                      h - 2 * margin);
     // init the text here
     return button_TTF;
 }

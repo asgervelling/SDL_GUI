@@ -3,18 +3,25 @@
 
 #include "structs.h"
 
-void render_rect(SDL_Renderer *renderer, Rect rect, SDL_Color color)
+void print_rect(SDL_Rect rect, char name[])
+{
+    printf("Rect for %s:\n"
+           "x: %d, y: %d\n"
+           "w: %d, h: %d\n\n", name,
+                             rect.x,
+                             rect.y,
+                             rect.w,
+                             rect.h);
+}
+
+void render_rect(SDL_Renderer *renderer, SDL_Rect rect, SDL_Color color)
 {
     SDL_SetRenderDrawColor(renderer,
                            color.r,
                            color.g,
                            color.b,
                            color.a);
-    SDL_Rect dest = {rect.x,
-                     rect.y,
-                     rect.w,
-                     rect.h};
-    SDL_RenderFillRect(renderer, &dest);
+    SDL_RenderFillRect(renderer, &rect);
 }
 
 /*
@@ -30,10 +37,29 @@ void render_button(parent_container = some container)
 
 void render_text(State *state)
 {
-    return;   
+    return;
+}
+
+void render_button_TTF(SDL_Renderer *renderer, Button_TTF button)
+{
+    // Button
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &button.rect);
+    print_rect(button.rect, "button");
+
+    // Text
+    
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    
+    // SDL_RenderCopy(renderer, button.label.texture, NULL, &button.label.rect);
+    SDL_RenderFillRect(renderer, &button.label.rect);
+    print_rect(button.label.rect, "label");
+    
 }
 
 void render_GUI(State *state, SDL_Renderer *renderer)
 {
-    return;
+    render_button_TTF(renderer, state->buttons[btn_file]);
+
+    
 }

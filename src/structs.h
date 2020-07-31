@@ -9,11 +9,6 @@
 
 typedef struct
 {
-    int x, y, w, h;
-} Rect;
-
-typedef struct
-{
     Uint8 r, g, b, a;
 } Color;
 
@@ -26,7 +21,7 @@ typedef struct
 
 typedef struct
 {
-    Rect rect;
+    SDL_Rect rect;
     SDL_Texture *texture;
 } Label;
 
@@ -36,14 +31,13 @@ typedef struct
 
 typedef struct
 {
-    Rect rect;
+    SDL_Rect rect;
     SDL_Texture *texture;
 } Button_IMG;
 
 typedef struct
 {
-    Rect rect;
-    int margin;
+    SDL_Rect rect;
     Label label;
 } Button_TTF;
 
@@ -60,12 +54,12 @@ enum Buttons
 
 typedef struct
 {
-    Rect rect;
+    SDL_Rect rect;
 } Container;
 
 typedef struct
 {
-    Rect rect;
+    SDL_Rect rect;
 } Graphic_User_Interface;
 
 /**********
