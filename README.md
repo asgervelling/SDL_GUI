@@ -1,8 +1,6 @@
-# Plot-Graphs
+# GUI with SDL
 Made with SDL2.
 Thank you, SDL. https://www.libsdl.org/
-
-Plot graphs in a standard cartesian coordinate system.
 
 How to set up SDL2:
 
