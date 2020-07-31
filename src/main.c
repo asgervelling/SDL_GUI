@@ -173,6 +173,7 @@ int main(int argc, char* argv[])
     if (state.buttons[btn_file].label.texture != NULL)
     {
         SDL_DestroyTexture(state.buttons[btn_file].label.texture);
+        printf("destroyed texture\n");
     }
     TTF_CloseFont(state.font);
 

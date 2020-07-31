@@ -45,21 +45,22 @@ void render_button_TTF(SDL_Renderer *renderer, Button_TTF button)
     // Button
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(renderer, &button.rect);
-    print_rect(button.rect, "button");
 
     // Text
     
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     
     // SDL_RenderCopy(renderer, button.label.texture, NULL, &button.label.rect);
+    // SDL_RenderCopy(renderer, button.label.texture, NULL, &button.label.rect);
     SDL_RenderFillRect(renderer, &button.label.rect);
-    print_rect(button.label.rect, "label");
     
 }
 
 void render_GUI(State *state, SDL_Renderer *renderer)
 {
     render_button_TTF(renderer, state->buttons[btn_file]);
+    SDL_RenderCopy(renderer, state->buttons[btn_file].label.texture, NULL, &state->buttons[btn_file].label.rect);
+    
 
     
 }

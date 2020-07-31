@@ -78,7 +78,7 @@ typedef struct
 {
     // GUI
     Graphic_User_Interface GUI;
-    Button_TTF buttons[12];
+    Button_TTF buttons[1];
 
     // Animation
     Animation_Helper GUI_anim;

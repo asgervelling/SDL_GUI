@@ -20,12 +20,16 @@ SDL_Rect init_rect(int x, int y, int w, int h)
 
 void init_font(State *state)
 {
-    state->font = TTF_OpenFont("resources/monogram.ttf", 36);
+    state->font = TTF_OpenFont("resources/monogram.ttf", 12);
 }
 
 void put_text_on_button(State *state, SDL_Renderer *renderer, Button_TTF button, char text[])
 {
-    SDL_Surface *temp = TTF_RenderText_Blended(state->font, text, state->colors.black);
+    SDL_Color cool = {0, 0, 0, 0};
+    SDL_Surface *temp = TTF_RenderText_Solid(state->font,
+                                             "test text",
+                                             cool);
+    
     
     button.label.texture = SDL_CreateTextureFromSurface(renderer, temp);
     printf("                test label rect: %d %d %d %d\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
@@ -77,6 +81,18 @@ void init_GUI(State *state, SDL_Renderer *renderer)
 
     // GUI components
     state->buttons[btn_file] = init_button_TTF(200, 200, 132, 32);
-    put_text_on_button(state, renderer, state->buttons[btn_file], "File");
+    // put_text_on_button(state, renderer, state->buttons[btn_file], "File");    
+    SDL_Color cool = {0, 0, 0, 255};
+    SDL_Surface *temp = TTF_RenderText_Solid(state->font,
+                                             "test text",
+                                             cool);
     
+    
+    state->buttons[btn_file].label.texture = SDL_CreateTextureFromSurface(renderer, temp);
+    printf("                test label rect: %d %d %d %d\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+                                                    state->buttons[btn_file].label.rect.x,
+                                                    state->buttons[btn_file].label.rect.y,
+                                                    state->buttons[btn_file].label.rect.w,
+                                                    state->buttons[btn_file].label.rect.h);
+    SDL_FreeSurface(temp);
 }
