@@ -3,9 +3,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-/**********
- * GUI
- * *******/
+typedef struct
+{
+    int a, b;
+} Int_Tuple;
 
 typedef struct
 {
@@ -45,7 +46,7 @@ enum Buttons
 {
     btn_file,
     btn_file_open,
-    btn_file_save
+    btn_file_save,
 };
 
 /**********
@@ -78,7 +79,7 @@ typedef struct
 {
     // GUI
     Graphic_User_Interface GUI;
-    Button_TTF buttons[1];
+    Button_TTF buttons[5];
 
     // Animation
     Animation_Helper GUI_anim;

@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
+#include <math.h>
 
 #include "structs.h"
 
@@ -22,7 +23,7 @@ SDL_Rect init_rect(int x, int y, int w, int h)
 void init_font(State *state)
 {  
     TTF_Font *font;
-    font=TTF_OpenFont("resources/monogram.ttf", 16);
+    font=TTF_OpenFont("resources/monogram.ttf", 36);
     if(!font) 
     {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
@@ -37,7 +38,7 @@ void put_text_on_button(State *state, SDL_Renderer *renderer, Button_TTF button,
 {
     SDL_Surface *temp = TTF_RenderText_Solid(state->font,
                                              "hej",
-                                             state->colors.black);
+                                             state->colors.white);
     
     // state->buttons[btn_file].label.texture = SDL_CreateTextureFromSurface(renderer, temp);
     button.label.texture = SDL_CreateTextureFromSurface(renderer, temp);
@@ -46,7 +47,7 @@ void put_text_on_button(State *state, SDL_Renderer *renderer, Button_TTF button,
 
 SDL_Texture* init_texture(State *state, SDL_Renderer *renderer, char text[])
 {
-    SDL_Surface *surface = TTF_RenderText_Solid(state->font, text, state->colors.black);
+    SDL_Surface *surface = TTF_RenderText_Solid(state->font, text, state->colors.white);
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
     return texture;
@@ -67,16 +68,39 @@ SDL_Color init_color(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
     return color;
 }
 
-Button_TTF init_button_TTF(int x, int y, int w, int h)
+Int_Tuple get_text_size(State *state, char text[])
+{
+    // get the width and height of a string as it would be rendered in a loaded font
+    //TTF_Font *font;
+    int w,h;
+    if(TTF_SizeText(state->font, text ,&w,&h))
+    {
+        printf("TTF_SizeText: %s\n", TTF_GetError());
+        SDL_Quit();
+    } else 
+    {
+        printf("width=%d height=%d\n",w,h);
+    }
+    Int_Tuple tuple;
+    tuple.a = w;
+    tuple.b = h;
+    return tuple;
+}
+
+Button_TTF init_button_TTF(State *state, SDL_Renderer *renderer, char text[], int x, int y, int w, int h)
 {
     Button_TTF button_TTF;
     button_TTF.rect = init_rect(x, y, w, h);
     int margin = 6;
-    button_TTF.label.rect = init_rect(x + margin,
-                                      y + margin,
-                                      w - 2 * margin,
-                                      h - 2 * margin);
+    
     // init the text here
+    Int_Tuple text_size = get_text_size(state, text);
+    button_TTF.label.rect = init_rect(x + margin,
+                                      y,
+                                      fmin(text_size.a, w),
+                                      fmin(text_size.b, h));
+    button_TTF.label.texture = init_texture(state, renderer, text);
+
     return button_TTF;
 }
 
@@ -92,7 +116,5 @@ void init_GUI(State *state, SDL_Renderer *renderer)
     state->colors.blue = init_color(0, 0, 255, 255);
 
     // GUI components
-    state->buttons[btn_file] = init_button_TTF(200, 200, 132, 32);
-    state->buttons->label.texture = init_texture(state, renderer, "Goddag eiii");
-   
+    state->buttons[btn_file] = init_button_TTF(state, renderer, "text", 200, 200, 132, 32);   
 }
