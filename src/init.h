@@ -3,6 +3,7 @@
 
 SDL_Color init_color(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 SDL_Rect init_rect(SDL_Rect rect, int x, int y, int w, int h);
+SDL_Texture* init_texture(State *state, SDL_Renderer *renderer, char text[]);
 Button_TTF init_button_TTF(int x,
                            int y,
                            int w,

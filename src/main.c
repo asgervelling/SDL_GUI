@@ -138,7 +138,10 @@ int main(int argc, char* argv[])
 
 
     // Init SDL_ttf. Must be called before using other SDL_ttf functions
-    TTF_Init();
+    if(TTF_Init()==-1) {
+        printf("TTF_Init: %s\n", TTF_GetError());
+        exit(2);
+    }
 
     // Init this program
     initialize(&state, renderer);
