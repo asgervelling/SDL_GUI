@@ -136,11 +136,14 @@ int main(int argc, char* argv[])
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     state.renderer = renderer;
 
+
+    // Init SDL_ttf. Must be called before using other SDL_ttf functions
+    TTF_Init();
+
     // Init this program
     initialize(&state, renderer);
 
-    // Init SDL_ttf (for text fonts)
-    TTF_Init();
+
 
     
     /*********

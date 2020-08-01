@@ -1,7 +1,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 #include "structs.h"
+#include "init.h"
 
 void print_rect(SDL_Rect rect, char name[])
 {
@@ -59,8 +61,23 @@ void render_button_TTF(SDL_Renderer *renderer, Button_TTF button)
 void render_GUI(State *state, SDL_Renderer *renderer)
 {
     render_button_TTF(renderer, state->buttons[btn_file]);
-    SDL_RenderCopy(renderer, state->buttons[btn_file].label.texture, NULL, &state->buttons[btn_file].label.rect);
-    
 
-    
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+    SDL_Rect rect_text;
+    rect_text.x = 0;
+    rect_text.y = 0;
+    rect_text.w = 200;
+    rect_text.h = 60;
+
+    SDL_Texture *message = state->buttons[0].label.texture;
+    SDL_RenderCopy(renderer, message, NULL, &rect_text);
+
+    /*
+    if (SDL_RenderCopy(renderer, state->buttons[btn_file].label.texture, NULL, &state->buttons[btn_file].label.rect) == -1)
+    {
+        perror("SDL_RenderCopy error\n");
+        SDL_Quit();
+    }
+    */    
 }
