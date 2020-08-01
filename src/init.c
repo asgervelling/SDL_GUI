@@ -84,13 +84,7 @@ Button_TTF init_button_TTF(State *state, SDL_Renderer *renderer, char text[], in
     y = state->containers[parent_container].rect.y + y;
     button_TTF.rect = init_rect(x, y, w, h);
 
-    printf("Parent container: %d\n\tParent container position: (%d, %d)\n\tButton position: (%d, %d)\n\n",
-            parent_container,
-            state->containers[parent_container].rect.x,
-            state->containers[parent_container].rect.y,
-            x, y);
-
-    int margin = 6;
+    u_int8_t margin = 6;
     
     // Never stretch the text, but shrink it if it is too large
     // for the button.
@@ -103,6 +97,47 @@ Button_TTF init_button_TTF(State *state, SDL_Renderer *renderer, char text[], in
 
     return button_TTF;
 }
+
+Button_TTF_Bordered init_button_border_TTF(State *state,
+                                  SDL_Renderer *renderer,
+                                  char text[],
+                                  int border_thickness,
+                                  int x, int y, int w, int h,
+                                  u_int8_t parent_container)
+{
+    state->GUI.num_buttons_TTF_bordered += 1;
+
+    // Create new button with border
+    Button_TTF_Bordered button_TTF;
+    button_TTF.parent_container = parent_container;
+    
+    button_TTF.parent_container = parent_container;
+    x = state->containers[parent_container].rect.x + x;
+    y = state->containers[parent_container].rect.y + y;
+    button_TTF.rect = init_rect(x, y, w, h);
+
+    // Create the border
+    button_TTF.rect = init_rect(x, y, w, h);
+    button_TTF.border_color = state->colors.black;
+
+    // Create inner rect
+    button_TTF.inner_rect = init_rect(x + border_thickness,
+                                      y + border_thickness,
+                                      w - (2*border_thickness),
+                                      h - (2*border_thickness));
+    button_TTF.rect_color = state->colors.white;                                      
+
+    // Text label
+    Int_Tuple text_size = get_text_size(state, text);
+    u_int8_t margin = 6;
+    button_TTF.label.rect = init_rect(x + margin + border_thickness,
+                                      y,
+                                      fmin(text_size.a, w),
+                                      fmin(text_size.b, h));
+    button_TTF.label.texture = init_texture(state, renderer, text);
+
+    return button_TTF;                                      
+}                                  
 
 Container init_container(State *state, SDL_Renderer *renderer, SDL_Color color, int x, int y, int w, int h)
 {
@@ -127,6 +162,7 @@ void init_GUI(State *state, SDL_Renderer *renderer)
     // more reusable.
     state->GUI.num_containers = 0;
     state->GUI.num_buttons = 0;
+    state->GUI.num_buttons_TTF_bordered = 0;
 
     // Colors
     state->colors.black = init_color(0, 0, 0, 255);
@@ -157,4 +193,6 @@ void init_GUI(State *state, SDL_Renderer *renderer)
     // Buttons
     state->buttons_TTF[btn_file] = init_button_TTF(state, renderer, "File", 0, 0, 132, 32, 0);
     state->buttons_TTF[btn_file_open] = init_button_TTF(state, renderer, "Open", 0, 0, 132, 32, 1);
+
+    state->buttons_TTF_bordered[0] = init_button_border_TTF(state, renderer, "Test ja", 4, 0, 100, 132, 32, 1);
 }

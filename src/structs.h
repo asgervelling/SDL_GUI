@@ -49,8 +49,12 @@ typedef struct
 typedef struct
 {
     SDL_Rect rect;
+    SDL_Rect inner_rect;
     u_int8_t border_thickness;
-    u_int8_t parent_container;    
+    u_int8_t parent_container;
+    SDL_Color rect_color;
+    SDL_Color border_color;
+    Label label;
 } Button_TTF_Bordered;
 
 
@@ -74,7 +78,8 @@ typedef struct
 typedef struct
 {
     SDL_Rect rect;
-    u_int8_t num_buttons, num_containers;
+    u_int8_t num_buttons, num_buttons_TTF_bordered;
+    u_int8_t num_containers;
 } Graphic_User_Interface;
 
 /**********
@@ -95,6 +100,7 @@ typedef struct
     Graphic_User_Interface GUI;
     Container containers[2];
     Button_TTF buttons_TTF[5];
+    Button_TTF_Bordered buttons_TTF_bordered[1];
 
     // Animation
     Animation_Helper GUI_anim;
