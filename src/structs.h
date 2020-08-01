@@ -18,6 +18,7 @@ typedef struct
     SDL_Color black;
     SDL_Color white;
     SDL_Color blue;
+    SDL_Color grey;
 } Colors;
 
 typedef struct

@@ -46,15 +46,7 @@ void render_button_TTF(SDL_Renderer *renderer, Button_TTF button)
 {
     // Button
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderFillRect(renderer, &button.rect);
-
-    // Text
-    
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    
-    // SDL_RenderCopy(renderer, button.label.texture, NULL, &button.label.rect);
-    // SDL_RenderFillRect(renderer, &button.label.rect);
-    
+    SDL_RenderFillRect(renderer, &button.rect);    
 }
 
 void render_containers(SDL_Renderer *renderer, Container containers[], u_int8_t num_containers)
@@ -88,6 +80,8 @@ void render_GUI(State *state, SDL_Renderer *renderer)
     render_containers(renderer,
                       state->containers,
                       state->GUI.num_containers);
+    
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     render_buttons_TTF(renderer,
                        state->buttons_TTF,
                        state->GUI.num_buttons);

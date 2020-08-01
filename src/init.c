@@ -76,14 +76,24 @@ Button_TTF init_button_TTF(State *state, SDL_Renderer *renderer, char text[], in
 
     // Create a new Button_TTF
     Button_TTF button_TTF;
+
+    // Position button according to "parent" container
+    // (and save the information for later use)
+    button_TTF.parent_container = parent_container;
+    x = state->containers[parent_container].rect.x + x;
+    y = state->containers[parent_container].rect.y + y;
     button_TTF.rect = init_rect(x, y, w, h);
 
-    // Make the button a child of a container
-    button_TTF.parent_container = parent_container;
+    printf("Parent container: %d\n\tParent container position: (%d, %d)\n\tButton position: (%d, %d)\n\n",
+            parent_container,
+            state->containers[parent_container].rect.x,
+            state->containers[parent_container].rect.y,
+            x, y);
 
     int margin = 6;
     
-    // init the text label here
+    // Never stretch the text, but shrink it if it is too large
+    // for the button.
     Int_Tuple text_size = get_text_size(state, text);
     button_TTF.label.rect = init_rect(x + margin,
                                       y,
@@ -120,6 +130,7 @@ void init_GUI(State *state, SDL_Renderer *renderer)
 
     // Colors
     state->colors.black = init_color(0, 0, 0, 255);
+    state->colors.grey = init_color(100, 100, 100, 255);
     state->colors.white = init_color(255, 255, 255, 255);
     state->colors.blue = init_color(0, 0, 255, 255);
 
@@ -130,14 +141,14 @@ void init_GUI(State *state, SDL_Renderer *renderer)
     // Containers
     state->containers[0] = init_container(state,
                                           renderer,
-                                          state->colors.white,
+                                          state->colors.grey,
                                           0,
                                           0,
                                           320,
                                           640);
-    state->containers[0] = init_container(state,
+    state->containers[1] = init_container(state,
                                           renderer,
-                                          state->colors.black,
+                                          state->colors.white,
                                           320,
                                           0,
                                           640,
@@ -145,5 +156,5 @@ void init_GUI(State *state, SDL_Renderer *renderer)
 
     // Buttons
     state->buttons_TTF[btn_file] = init_button_TTF(state, renderer, "File", 0, 0, 132, 32, 0);
-    state->buttons_TTF[btn_file_open] = init_button_TTF(state, renderer, "Open", 300, 300, 132, 32, 0);  
+    state->buttons_TTF[btn_file_open] = init_button_TTF(state, renderer, "Open", 0, 0, 132, 32, 1);
 }
