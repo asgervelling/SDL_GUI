@@ -40,7 +40,18 @@ typedef struct
 {
     SDL_Rect rect;
     Label label;
+
+    // Simulate OOP for easier positioning
+    u_int8_t parent_container;
 } Button_TTF;
+
+typedef struct
+{
+    SDL_Rect rect;
+    u_int8_t border_thickness;
+    u_int8_t parent_container;    
+} Button_TTF_Bordered;
+
 
 enum Buttons
 {
@@ -56,11 +67,13 @@ enum Buttons
 typedef struct
 {
     SDL_Rect rect;
+    SDL_Color color;
 } Container;
 
 typedef struct
 {
     SDL_Rect rect;
+    u_int8_t num_buttons, num_containers;
 } Graphic_User_Interface;
 
 /**********
@@ -77,9 +90,10 @@ typedef struct
  * *******/
 typedef struct
 {
-    // GUI
+    // GUI with all of its components
     Graphic_User_Interface GUI;
-    Button_TTF buttons[5];
+    Container containers[2];
+    Button_TTF buttons_TTF[5];
 
     // Animation
     Animation_Helper GUI_anim;

@@ -53,24 +53,42 @@ void render_button_TTF(SDL_Renderer *renderer, Button_TTF button)
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     
     // SDL_RenderCopy(renderer, button.label.texture, NULL, &button.label.rect);
-    // SDL_RenderCopy(renderer, button.label.texture, NULL, &button.label.rect);
     // SDL_RenderFillRect(renderer, &button.label.rect);
     
 }
 
+void render_containers(SDL_Renderer *renderer, Container containers[], u_int8_t num_containers)
+{
+    for (int i = 0; i < num_containers; ++i)
+    {
+        render_rect(renderer,
+                    containers[i].rect,
+                    containers[i].color);
+    }
+}
+
+void render_buttons_TTF(SDL_Renderer *renderer, Button_TTF buttons[], u_int8_t num_buttons)
+{
+    for (int i = 0; i < num_buttons; ++i)
+    {
+        render_button_TTF(renderer, buttons[i]);
+        if (SDL_RenderCopy(renderer,
+                           buttons[i].label.texture,
+                           NULL,
+                           &buttons[i].label.rect) < 0)
+        {
+            printf("SDL_RenderCopy: %s\n", SDL_GetError());
+            SDL_Quit();
+        }
+    }
+}
+
 void render_GUI(State *state, SDL_Renderer *renderer)
 {
-    render_button_TTF(renderer, state->buttons[btn_file]);
-
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-
-    SDL_RenderCopy(renderer, state->buttons[btn_file].label.texture, NULL, &state->buttons[btn_file].label.rect);
-    
-    /*
-    if (SDL_RenderCopy(renderer, state->buttons[btn_file].label.texture, NULL, &state->buttons[btn_file].label.rect) == -1)
-    {
-        perror("SDL_RenderCopy error\n");
-        SDL_Quit();
-    }
-    */    
+    render_containers(renderer,
+                      state->containers,
+                      state->GUI.num_containers);
+    render_buttons_TTF(renderer,
+                       state->buttons_TTF,
+                       state->GUI.num_buttons);
 }

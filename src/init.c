@@ -34,17 +34,6 @@ void init_font(State *state)
     printf("Font loaded succesfully\n");
 }
 
-void put_text_on_button(State *state, SDL_Renderer *renderer, Button_TTF button, char text[])
-{
-    SDL_Surface *temp = TTF_RenderText_Solid(state->font,
-                                             "hej",
-                                             state->colors.white);
-    
-    // state->buttons[btn_file].label.texture = SDL_CreateTextureFromSurface(renderer, temp);
-    button.label.texture = SDL_CreateTextureFromSurface(renderer, temp);
-    SDL_FreeSurface(temp);
-}
-
 SDL_Texture* init_texture(State *state, SDL_Renderer *renderer, char text[])
 {
     SDL_Surface *surface = TTF_RenderText_Solid(state->font, text, state->colors.white);
@@ -73,27 +62,28 @@ Int_Tuple get_text_size(State *state, char text[])
     // get the width and height of a string as it would be rendered in a loaded font
     //TTF_Font *font;
     int w,h;
-    if(TTF_SizeText(state->font, text ,&w,&h))
-    {
-        printf("TTF_SizeText: %s\n", TTF_GetError());
-        SDL_Quit();
-    } else 
-    {
-        printf("width=%d height=%d\n",w,h);
-    }
+    TTF_SizeText(state->font, text ,&w,&h);
     Int_Tuple tuple;
     tuple.a = w;
     tuple.b = h;
     return tuple;
 }
 
-Button_TTF init_button_TTF(State *state, SDL_Renderer *renderer, char text[], int x, int y, int w, int h)
+Button_TTF init_button_TTF(State *state, SDL_Renderer *renderer, char text[], int x, int y, int w, int h, u_int8_t parent_container)
 {
+    // Keep track of the total number of buttons
+    state->GUI.num_buttons += 1;
+
+    // Create a new Button_TTF
     Button_TTF button_TTF;
     button_TTF.rect = init_rect(x, y, w, h);
+
+    // Make the button a child of a container
+    button_TTF.parent_container = parent_container;
+
     int margin = 6;
     
-    // init the text here
+    // init the text label here
     Int_Tuple text_size = get_text_size(state, text);
     button_TTF.label.rect = init_rect(x + margin,
                                       y,
@@ -104,17 +94,56 @@ Button_TTF init_button_TTF(State *state, SDL_Renderer *renderer, char text[], in
     return button_TTF;
 }
 
+Container init_container(State *state, SDL_Renderer *renderer, SDL_Color color, int x, int y, int w, int h)
+{
+    // Various GUI elements are positioned in relation to containers
+    state->GUI.num_containers += 1;
+
+    Container container;
+    container.rect = init_rect(x, y, w, h);
+    container.color = color;
+    return container;
+}
+
 /**********************
  * GUI
  * *******************/
 
 void init_GUI(State *state, SDL_Renderer *renderer)
 {
+    // The GUI struct should only hold information about
+    // the number of each of its components.
+    // By keeping the components seperate, they become
+    // more reusable.
+    state->GUI.num_containers = 0;
+    state->GUI.num_buttons = 0;
+
     // Colors
     state->colors.black = init_color(0, 0, 0, 255);
     state->colors.white = init_color(255, 255, 255, 255);
     state->colors.blue = init_color(0, 0, 255, 255);
 
-    // GUI components
-    state->buttons[btn_file] = init_button_TTF(state, renderer, "text", 200, 200, 132, 32);   
+    /*
+        GUI components
+    */
+
+    // Containers
+    state->containers[0] = init_container(state,
+                                          renderer,
+                                          state->colors.white,
+                                          0,
+                                          0,
+                                          320,
+                                          640);
+    state->containers[0] = init_container(state,
+                                          renderer,
+                                          state->colors.black,
+                                          320,
+                                          0,
+                                          640,
+                                          640);
+
+    // Buttons
+    state->buttons_TTF[btn_file] = init_button_TTF(state, renderer, "File", 0, 0, 132, 32, 0);
+    state->buttons_TTF[btn_file_open] = init_button_TTF(state, renderer, "Open", 300, 300, 132, 32, 0);  
 }
