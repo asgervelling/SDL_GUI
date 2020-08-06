@@ -102,7 +102,7 @@ typedef struct
     SDL_Rect rect;
     u_int8_t num_buttons, num_buttons_TTF_bordered;
     u_int8_t num_containers;
-    
+
     u_int8_t num_rows, num_columns;
 } Graphic_User_Interface;
 
@@ -116,16 +116,25 @@ typedef struct
 } Animation_Helper;
 
 /**********
+ * CONTROL
+ * *******/
+
+typedef struct
+{
+    int x, y;
+} Mouse;
+
+/**********
  * STATE
  * *******/
 typedef struct
 {
     // GUI with all of its components
     Graphic_User_Interface GUI;
-    Container containers[2];
-    Button_TTF buttons_TTF[5];
-    Button_TTF_Bordered buttons_TTF_bordered[1];
-    Button_TTF_Dropdown buttons_TTF_dropdown[1];
+    Container containers[240];
+    Button_TTF buttons_TTF[16];
+    Button_TTF_Bordered buttons_TTF_bordered[8];
+    Button_TTF_Dropdown buttons_TTF_dropdown[8];
     Grid grid;
 
     // Animation
@@ -140,6 +149,9 @@ typedef struct
 
     // State settings
     int display_width, display_height;
+
+    // Mouse
+    Mouse mouse;
 } State;
 
 #endif

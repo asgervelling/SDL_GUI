@@ -12,7 +12,7 @@
 void initialize(State *state, SDL_Renderer *renderer)
 {
     init_font(state);
-    init_GUI(state, renderer);
+    init_GUI(state, renderer, 5, 5);
     return;
 }
 
@@ -85,6 +85,8 @@ int listen_for_events(State *state, SDL_Window *window, float dt)
         }
     }
 
+    // Mouse state
+
     return done;
 }
 
@@ -103,6 +105,9 @@ void render(SDL_Renderer *renderer, State *state)
 
 void process(State *state, float dt)
 {
+    // get mouse position
+    SDL_GetMouseState(&state->mouse.x, &state->mouse.y);
+    
     return;
 }
 

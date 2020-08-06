@@ -32,6 +32,6 @@ Grid init_grid_by_cells(State *state,
 void init_font(State *state);
 
 // GUI
-void init_GUI(State *state, SDL_Renderer *renderer);
+void init_GUI(State *state, SDL_Renderer *renderer, u_int8_t rows, u_int8_t columns);
 
 #endif

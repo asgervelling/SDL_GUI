@@ -194,7 +194,7 @@ Container init_container(State *state, SDL_Renderer *renderer, SDL_Color color, 
  * GUI
  * *******************/
 
-void init_GUI(State *state, SDL_Renderer *renderer)
+void init_GUI(State *state, SDL_Renderer *renderer, u_int8_t rows, u_int8_t columns)
 {
     // The GUI struct should only hold information about
     // the number of each of its components.
@@ -203,51 +203,51 @@ void init_GUI(State *state, SDL_Renderer *renderer)
     state->GUI.num_containers = 0;
     state->GUI.num_buttons = 0;
     state->GUI.num_buttons_TTF_bordered = 0;
+    state->GUI.num_rows = rows;
+    state->GUI.num_columns = columns;
+    state->display_width = 960;
+    state->display_height = 640;
 
     // Colors
     state->colors.black = init_color(0, 0, 0, 255);
-    state->colors.grey = init_color(100, 100, 100, 255);
+    state->colors.grey = init_color(40, 40, 40, 255);
     state->colors.white = init_color(255, 255, 255, 255);
     state->colors.blue = init_color(0, 0, 255, 255);
+
+    int rgba_value = 40;
+    SDL_Color container_color;
 
     /*
         GUI components
     */
 
-    // Containers do not have children,
-    // but each element further down in the tree hold an 'int parent_container'
-    // which is a pointer to the array subscript of that container.
-    state->containers[0] = init_container(state,
-                                          renderer,
-                                          state->colors.grey,
-                                          0,
-                                          0,
-                                          320,
-                                          640);
-    state->containers[1] = init_container(state,
-                                          renderer,
-                                          state->colors.white,
-                                          320,
-                                          0,
-                                          640,
-                                          640);
-
-    // Buttons
-    state->buttons_TTF[btn_file] = init_button_TTF(state, renderer, "File", 0, 0, 132, 32, 0);
-    state->buttons_TTF[btn_file_open] = init_button_TTF(state, renderer, "Open", 0, 0, 132, 32, 1);
-
-    state->buttons_TTF_bordered[0] = init_button_border_TTF(state, renderer, "Test jaaaaaaaaaaaaa", 4, 0, 100, 132, 32, 1);
-
-    // Colorful grid
-    state->grid = init_grid_by_cells(state,
-                                     state->colors.blue,
-                                     8, 8,
-                                     0, 32,
-                                     32, 32,
-                                     0);
-    
-    test_grid_colors(state);
-    // File IO
-    read_file(state, "GUI_files/testfile.txt");
-                                   
+    // Containers
+    int index = 0;
+    SDL_Rect container_dest;
+    container_dest.w = state->display_width / columns;
+    container_dest.h = state->display_height / rows;
+    container_dest.x = 0;
+    container_dest.y = 0;
+    for (int row = 0; row < rows; ++row)
+    {
+        for (int col = 0; col < columns; ++col)
+        {
+            container_dest.x = col * container_dest.w;
+            container_dest.y = row * container_dest.h;
+            rgba_value += 6;
+            if (rgba_value > 255)
+            {
+                rgba_value = rgba_value - 255;
+            }
+            container_color = init_color(rgba_value, rgba_value, rgba_value, rgba_value);
+            state->containers[index] = init_container(state,
+                                                      renderer,
+                                                      container_color,
+                                                      container_dest.x,
+                                                      container_dest.y,
+                                                      container_dest.w,
+                                                      container_dest.h);
+            ++index;   
+        }
+    }                              
 }

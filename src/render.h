@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 
 // Debug
-void print_rect(SDL_Rect rect);
+void print_rect(SDL_Rect rect, char name[]);
 
 // Render components
 void render_rect(SDL_Renderer *renderer, SDL_Rect rect, SDL_Color color);
