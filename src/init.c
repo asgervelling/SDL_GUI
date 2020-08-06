@@ -4,6 +4,8 @@
 #include <math.h>
 
 #include "structs.h"
+#include "file_io.h"
+#include "grids.h"
 
 SDL_Rect init_rect(int x, int y, int w, int h)
 {
@@ -31,7 +33,6 @@ void init_font(State *state)
         SDL_Quit();
     }
     state->font = font;
-    printf("Font loaded succesfully\n");
 }
 
 SDL_Texture* init_text_texture(State *state, SDL_Renderer *renderer, char text[], SDL_Color color)
@@ -137,7 +138,46 @@ Button_TTF_Bordered init_button_border_TTF(State *state,
     button_TTF.label.texture = init_text_texture(state, renderer, text, state->colors.black);
 
     return button_TTF;                                      
-}                                  
+}                         
+
+Cell init_cell(int x, int y, int w, int h, SDL_Color color)
+{
+    Cell cell;
+    cell.rect = init_rect(x, y, w, h);
+    cell.color = color;
+
+    return cell;
+}
+
+Grid init_grid_by_cells(State *state,
+                              SDL_Color default_color,
+                              int num_rows, int num_columns,
+                              int x, int y, int cell_width, int cell_height,
+                              u_int8_t parent_container)
+{
+    Grid grid;
+
+    int x0 = state->containers[parent_container].rect.x + x;
+    int y0 = state->containers[parent_container].rect.y + y;
+    for (int row = 0; row < num_rows; ++row)
+    {
+        for (int column = 0; column < num_columns; ++column)
+        {
+
+            grid.matrix[row][column] = init_cell(x0 + column * cell_width,
+                                     y0 + row * cell_height,
+                                     cell_width,
+                                     cell_height,
+                                     default_color);
+        }
+    }
+
+    grid.num_rows = num_rows;
+    grid.num_columns = num_columns;
+    grid.parent_container = parent_container;
+
+    return grid;
+}
 
 Container init_container(State *state, SDL_Renderer *renderer, SDL_Color color, int x, int y, int w, int h)
 {
@@ -174,7 +214,9 @@ void init_GUI(State *state, SDL_Renderer *renderer)
         GUI components
     */
 
-    // Containers
+    // Containers do not have children,
+    // but each element further down in the tree hold an 'int parent_container'
+    // which is a pointer to the array subscript of that container.
     state->containers[0] = init_container(state,
                                           renderer,
                                           state->colors.grey,
@@ -195,4 +237,17 @@ void init_GUI(State *state, SDL_Renderer *renderer)
     state->buttons_TTF[btn_file_open] = init_button_TTF(state, renderer, "Open", 0, 0, 132, 32, 1);
 
     state->buttons_TTF_bordered[0] = init_button_border_TTF(state, renderer, "Test jaaaaaaaaaaaaa", 4, 0, 100, 132, 32, 1);
+
+    // Colorful grid
+    state->grid = init_grid_by_cells(state,
+                                     state->colors.blue,
+                                     8, 8,
+                                     0, 32,
+                                     32, 32,
+                                     0);
+    
+    test_grid_colors(state);
+    // File IO
+    read_file(state, "GUI_files/testfile.txt");
+                                   
 }

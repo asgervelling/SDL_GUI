@@ -2,6 +2,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 
+#include "math.h"
+
 #include "structs.h"
 #include "init.h"
 
@@ -42,7 +44,7 @@ void render_text(State *state)
     return;
 }
 
-void render_button_TTF(SDL_Renderer *renderer, Button_TTF button, SDL_Rect parent_container_rect)
+void render_button_TTF(SDL_Renderer *renderer, Button_TTF button)
 {
     // Button
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -70,26 +72,13 @@ void render_button_TTF_bordered(SDL_Renderer *renderer,
                            inner_color.b,
                            inner_color.a);
     SDL_RenderFillRect(renderer, &button.inner_rect);
-
-    print_rect(button.rect, "border");
-    print_rect(button.inner_rect, "inner rect");
-}
-
-void render_containers(SDL_Renderer *renderer, Container containers[], u_int8_t num_containers)
-{
-    for (int i = 0; i < num_containers; ++i)
-    {
-        render_rect(renderer,
-                    containers[i].rect,
-                    containers[i].color);
-    }
 }
 
 void render_buttons_TTF(State *state, SDL_Renderer *renderer, Button_TTF buttons[], u_int8_t num_buttons)
 {
     for (int i = 0; i < num_buttons; ++i)
     {
-        render_button_TTF(renderer, buttons[i], state->containers[buttons[i].parent_container].rect);
+        render_button_TTF(renderer, buttons[i]);
         
         // Text
         if (SDL_RenderCopy(renderer,
@@ -124,6 +113,32 @@ void render_buttons_TTF_bordered(State *state, SDL_Renderer *renderer, Button_TT
     }
 }
 
+void render_cell(SDL_Renderer *renderer, Cell cell)
+{
+    render_rect(renderer, cell.rect, cell.color);
+}
+
+void render_grid(SDL_Renderer *renderer, Grid grid)
+{
+    for (int row = 0; row < grid.num_rows; ++row)
+    {
+        for (int column = 0; column < grid.num_columns; ++column)
+        {
+            render_cell(renderer, grid.matrix[row][column]);
+        }
+    }
+}
+
+void render_containers(SDL_Renderer *renderer, Container containers[], u_int8_t num_containers)
+{
+    for (int i = 0; i < num_containers; ++i)
+    {
+        render_rect(renderer,
+                    containers[i].rect,
+                    containers[i].color);
+    }
+}
+
 void render_GUI(State *state, SDL_Renderer *renderer)
 {
     render_containers(renderer,
@@ -138,6 +153,8 @@ void render_GUI(State *state, SDL_Renderer *renderer)
     render_buttons_TTF_bordered(state,
                                 renderer,
                                 state->buttons_TTF_bordered,
-                                state->GUI.num_buttons_TTF_bordered);                       
-                           
-}
+                                state->GUI.num_buttons_TTF_bordered);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+
+    render_grid(renderer, state->grid);
+}                           

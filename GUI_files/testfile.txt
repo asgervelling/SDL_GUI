@@ -1,0 +1,10 @@
+container 1x2
+ button
+  text = "Button 0"
+ button
+  text = "Button 1"
+
+container 2x1
+ grid
+ button
+  text = "Lol"

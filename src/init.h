@@ -21,7 +21,14 @@ Button_TTF_Bordered init_button_border_TTF(State *state,
                                   char text[],
                                   int border_thickness,
                                   int x, int y, int w, int h,
-                                  u_int8_t parent_container);                           
+                                  u_int8_t parent_container);  
+
+Grid init_grid_by_cells(State *state,
+                              SDL_Color default_color,
+                              int num_rows, int num_columns,
+                              int x, int y, int cell_width, int cell_height,
+                              u_int8_t parent_container);
+                                                                                         
 void init_font(State *state);
 
 // GUI

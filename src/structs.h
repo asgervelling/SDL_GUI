@@ -57,6 +57,11 @@ typedef struct
     Label label;
 } Button_TTF_Bordered;
 
+typedef struct
+{
+    SDL_Rect rect;
+    Button_TTF buttons[3]; // Perhaps change this to a struct and get a LEN(arr) in the init() function?
+} Button_TTF_Dropdown;
 
 enum Buttons
 {
@@ -78,8 +83,27 @@ typedef struct
 typedef struct
 {
     SDL_Rect rect;
+    SDL_Color color;
+} Cell;
+
+typedef struct
+{
+    // A grid made up of cells. Good for LED grids on speakers, for example.
+    int num_rows, num_columns;
+    SDL_Rect rect;
+    u_int8_t parent_container;
+
+    // Don't need to use all these rows and columns
+    Cell matrix[96][64];
+} Grid;
+
+typedef struct
+{
+    SDL_Rect rect;
     u_int8_t num_buttons, num_buttons_TTF_bordered;
     u_int8_t num_containers;
+    
+    u_int8_t num_rows, num_columns;
 } Graphic_User_Interface;
 
 /**********
@@ -101,6 +125,8 @@ typedef struct
     Container containers[2];
     Button_TTF buttons_TTF[5];
     Button_TTF_Bordered buttons_TTF_bordered[1];
+    Button_TTF_Dropdown buttons_TTF_dropdown[1];
+    Grid grid;
 
     // Animation
     Animation_Helper GUI_anim;
@@ -111,6 +137,9 @@ typedef struct
     // Rendering
     SDL_Renderer *renderer;
     Colors colors;
+
+    // State settings
+    int display_width, display_height;
 } State;
 
 #endif
