@@ -7,13 +7,12 @@
 #include "structs.h"
 #include "init.h"
 #include "render.h"
-#include "buttons.h"
+#include "control.h"
 
 void initialize(State *state, SDL_Renderer *renderer)
 {
     init_font(state);
-    init_GUI(state, renderer, 5, 5);
-    return;
+    init_GUI(state, renderer, 2, 3);
 }
 
 int listen_for_events(State *state, SDL_Window *window, float dt)
@@ -105,8 +104,7 @@ void render(SDL_Renderer *renderer, State *state)
 
 void process(State *state, float dt)
 {
-    // get mouse position
-    SDL_GetMouseState(&state->mouse.x, &state->mouse.y);
+    mouse_process(state);
     
     return;
 }

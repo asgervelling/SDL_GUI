@@ -41,6 +41,7 @@ typedef struct
 {
     SDL_Rect rect;
     Label label;
+    SDL_Color color;
 
     // Simulate OOP for easier positioning
     u_int8_t parent_container;
@@ -78,6 +79,8 @@ typedef struct
 {
     SDL_Rect rect;
     SDL_Color color;
+    int num_child_components;
+    int rows, columns;
 } Container;
 
 typedef struct
@@ -103,7 +106,7 @@ typedef struct
     u_int8_t num_buttons, num_buttons_TTF_bordered;
     u_int8_t num_containers;
 
-    u_int8_t num_rows, num_columns;
+    int num_rows, num_columns;
 } Graphic_User_Interface;
 
 /**********
@@ -122,7 +125,13 @@ typedef struct
 typedef struct
 {
     int x, y;
+    SDL_Rect hovering_rect;
 } Mouse;
+
+typedef struct
+{
+    Mouse mouse;
+} Control;
 
 /**********
  * STATE
@@ -131,7 +140,7 @@ typedef struct
 {
     // GUI with all of its components
     Graphic_User_Interface GUI;
-    Container containers[240];
+    Container containers[6144];
     Button_TTF buttons_TTF[16];
     Button_TTF_Bordered buttons_TTF_bordered[8];
     Button_TTF_Dropdown buttons_TTF_dropdown[8];
@@ -150,8 +159,8 @@ typedef struct
     // State settings
     int display_width, display_height;
 
-    // Mouse
-    Mouse mouse;
+    // Control
+    Control control;
 } State;
 
 #endif

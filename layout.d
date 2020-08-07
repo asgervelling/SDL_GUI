@@ -1,1 +1,1 @@
-obj/layout.o: src/layout.c
+obj/layout.o: src/layout.c src/structs.h
