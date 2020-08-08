@@ -46,14 +46,22 @@ void render_text(State *state)
 
 void render_button_TTF(SDL_Renderer *renderer, Button_TTF button)
 {
-    // Button
-    Uint8 r, g, b, a;
-    r = button.color.r;
-    g = button.color.g;
-    b = button.color.b;
-    a = button.color.a;
-    SDL_SetRenderDrawColor(renderer, r, g, b, a);
-    SDL_RenderFillRect(renderer, &button.rect);    
+    // First the actual button
+    SDL_SetRenderDrawColor(renderer, button.color.r, button.color.g, button.color.b, button.color.a);
+    SDL_RenderFillRect(renderer, &button.rect); 
+
+    // Then the border, four rectangles
+    for (int i = 0; i < 4; ++i)
+    {
+        SDL_SetRenderDrawColor(renderer,
+                               button.border.colors[i].r,
+                               button.border.colors[i].g,
+                               button.border.colors[i].b,
+                               button.border.colors[i].a);
+        SDL_RenderFillRect(renderer, &button.border.rects[i]);                               
+    }
+
+
 }
 
 void render_button_TTF_bordered(SDL_Renderer *renderer,
@@ -85,6 +93,16 @@ void render_buttons_TTF(State *state, SDL_Renderer *renderer, Button_TTF buttons
     {
         render_button_TTF(renderer, buttons[i]);
         
+        // Text shadow
+        if (SDL_RenderCopy(renderer,
+                           buttons[i].label.texture_shadow,
+                           NULL,
+                           &buttons[i].label.rect_shadow) < 0)
+        {
+            printf("SDL_RenderCopy: %s\n", SDL_GetError());
+            SDL_Quit();
+        }
+
         // Text
         if (SDL_RenderCopy(renderer,
                            buttons[i].label.texture,

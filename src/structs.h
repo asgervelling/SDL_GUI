@@ -23,13 +23,23 @@ typedef struct
 
 typedef struct
 {
+    // A rect with some text and a shadow
     SDL_Rect rect;
+    SDL_Rect rect_shadow;
     SDL_Texture *texture;
+    SDL_Texture *texture_shadow;
 } Label;
 
 /**********
  * BUTTONS
  * *******/
+
+typedef struct
+{
+    // Can be used for any rectangle
+    SDL_Rect rects[4];
+    SDL_Color colors[4];
+} Border;
 
 typedef struct
 {
@@ -40,8 +50,10 @@ typedef struct
 typedef struct
 {
     SDL_Rect rect;
+    Border border;
     Label label;
     SDL_Color color;
+    SDL_Color text_color;
 
     // Simulate OOP for easier positioning
     u_int8_t parent_container;
@@ -71,6 +83,14 @@ enum Buttons
     btn_file_save,
 };
 
+enum Borders
+{
+    top,
+    bottom,
+    left,
+    right
+};
+
 /**********
  * GUI Rectangles
  * *******/
@@ -79,7 +99,6 @@ typedef struct
 {
     SDL_Rect rect;
     SDL_Color color;
-    int num_child_components;
     int rows, columns;
 } Container;
 
