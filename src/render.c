@@ -7,6 +7,9 @@
 #include "structs.h"
 #include "init.h"
 
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+
 void print_rect(SDL_Rect rect, char name[])
 {
     printf("Rect for %s:\n"
@@ -42,6 +45,66 @@ void render_button(parent_container = some container)
 void render_text(State *state)
 {
     return;
+}
+
+void render_triangle(SDL_Renderer *renderer, int ax, int ay, int bx, int by, int cx, int cy, int right_angle)
+{
+    int x_origo, y_origo;
+    int x_max, y_max;
+    int diff;
+
+    // Find origo
+    x_origo = MIN(ax, bx);
+    x_origo = MIN(x_origo, cx);
+    y_origo = MIN(ay, by);
+    y_origo = MIN(y_origo, cy);
+
+    // Find the point at the other end of the hypotenuse
+    x_max = MAX(ax, bx);
+    x_max = MAX(x_max, cx);
+    y_max = MAX(ay, by);
+    y_max = MAX(y_max, cy);
+
+    if (right_angle == top_left)
+    {
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        for (int x = x_origo; x < x_max; ++x)
+        {
+            diff = x - x_origo;
+            SDL_RenderDrawLine(renderer, x, y_origo, x, y_max - diff);
+        }
+    }
+    if (right_angle == top_right)
+    {
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        for (int x = x_origo; x < x_max; ++x)
+        {
+            diff = x - x_origo; // Same for x and y
+            SDL_RenderDrawLine(renderer, x, y_origo, x, y_origo + diff);
+            
+        }
+    }
+    if (right_angle == bottom_left)
+    {
+        for (int x = x_origo; x < x_max; ++x)
+        {
+            SDL_SetRenderDrawColor(renderer, 100, 100, 255, 255);
+            diff = x - x_origo;
+            SDL_RenderDrawLine(renderer, x, y_max, x, y_origo + diff);
+        }
+    }
+
+    if (right_angle == bottom_right)
+    {
+        for (int x = x_origo; x < x_max; ++x)
+        {
+            SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+            diff = x - x_origo;
+            SDL_RenderDrawLine(renderer, x, y_max, x, y_max - diff);
+        }
+    }
+
+    
 }
 
 void render_button_TTF(SDL_Renderer *renderer, Button_TTF button)
@@ -174,4 +237,8 @@ void render_GUI(State *state, SDL_Renderer *renderer)
                        state->GUI.num_buttons);
 
     render_grid(renderer, state->grid);
+
+
+
+    render_triangle(renderer, 0, 0, 40, 40, 0, 40, bottom_left);
 }                           

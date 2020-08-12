@@ -35,6 +35,14 @@ typedef struct
  * BUTTONS
  * *******/
 
+enum Corners
+{
+    top_left,
+    top_right,
+    bottom_left,
+    bottom_right
+};
+
 typedef struct
 {
     // Can be used for any rectangle

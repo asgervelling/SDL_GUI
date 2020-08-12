@@ -10,6 +10,7 @@ Container resize_container(Container input_container, int width, int height);
 Border init_border(SDL_Rect rect);
 Button_TTF init_button_TTF(State *state, SDL_Renderer *renderer, char text[], u_int8_t parent_container, int row, int column);
 
+Cell init_cell(int x, int y, int w, int h, SDL_Color color);
 Grid init_grid_by_cells(State *state,
                               SDL_Color default_color,
                               int num_rows, int num_columns,

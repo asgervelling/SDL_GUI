@@ -15,6 +15,7 @@ void render_button_TTF_bordered(SDL_Renderer *renderer,
                                 SDL_Color border_color,
                                 SDL_Color inner_color,
                                 SDL_Rect parent_container_rect);
+void render_triangle(SDL_Renderer *renderer, int ax, int ay, int bx, int by, int cx, int cy);
 void render_text(State *state);
 void render_cell(SDL_Renderer *renderer, Cell cell);
 void render_grid(SDL_Renderer *renderer, Grid grid);
