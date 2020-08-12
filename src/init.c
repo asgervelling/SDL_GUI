@@ -174,6 +174,8 @@ void init_GUI(State *state, SDL_Renderer *renderer, int rows, int columns)
     state->buttons_TTF[2] = init_button_TTF(state, renderer, "Button 2", 1, 0, 0);
     state->buttons_TTF[3] = init_button_TTF(state, renderer, "Button 3", 4, 0, 0);
     state->buttons_TTF[4] = init_button_TTF(state, renderer, "Button 4", 4, 0, 1);
+
+    
     
 
 }

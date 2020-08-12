@@ -71,17 +71,6 @@ typedef struct
 typedef struct
 {
     SDL_Rect rect;
-    SDL_Rect inner_rect;
-    u_int8_t border_thickness;
-    u_int8_t parent_container;
-    SDL_Color rect_color;
-    SDL_Color border_color;
-    Label label;
-} Button_TTF_Bordered;
-
-typedef struct
-{
-    SDL_Rect rect;
     Button_TTF buttons[3]; // Perhaps change this to a struct and get a LEN(arr) in the init() function?
 } Button_TTF_Dropdown;
 
@@ -94,10 +83,10 @@ enum Buttons
 
 enum Borders
 {
-    top,
-    bottom,
     left,
-    right
+    right,
+    top,
+    bottom
 };
 
 /**********
@@ -170,7 +159,6 @@ typedef struct
     Graphic_User_Interface GUI;
     Container containers[6144];
     Button_TTF buttons_TTF[16];
-    Button_TTF_Bordered buttons_TTF_bordered[8];
     Button_TTF_Dropdown buttons_TTF_dropdown[8];
     Grid grid;
 

@@ -27,16 +27,15 @@ Border init_border(SDL_Rect rect, int border_thickness)
     Border border;
 
     // Colors of the borders
-    SDL_Color border_color_0, border_color_1;
-    border_color_0 = init_color(0, 0, 0, 255);
-    border_color_1 = init_color(border_color_0.r + 120,
-                                border_color_0.g + 120,
-                                border_color_0.b + 120,
-                                255);
+    SDL_Color border_color_0, border_color_1, border_color_2, border_color_3;
+    border_color_0 = init_color(255, 0, 0, 255);
+    border_color_1 = init_color(0, 255, 0, 255);
+    border_color_2 = init_color(0, 0, 255, 255);
+    border_color_3 = init_color(0, 0, 0, 255);
     border.colors[top] = border_color_0;
-    border.colors[right] = border_color_0;
-    border.colors[bottom] = border_color_1;
-    border.colors[left] = border_color_1;
+    border.colors[right] = border_color_1;
+    border.colors[bottom] = border_color_2;
+    border.colors[left] = border_color_3;
 
     // Dimensions
     int x, y;
@@ -47,12 +46,12 @@ Border init_border(SDL_Rect rect, int border_thickness)
     w = rect.w;
     h = rect.h;
 
-    border.rects[top] = init_rect(x, y, w, border_thickness);
-    border.rects[bottom] = init_rect(x,
+    border.rects[top] = init_rect(x + border_thickness, y, w - 2 * border_thickness, border_thickness);
+    border.rects[bottom] = init_rect(x + border_thickness,
                                      y + h - border_thickness,
-                                     w - border_thickness,
+                                     w - 2 * border_thickness,
                                      border_thickness);
-    border.rects[left] = init_rect(x, y + border_thickness, border_thickness, h);
+    border.rects[left] = init_rect(x, y, border_thickness, h);
     border.rects[right] = init_rect(x + w - border_thickness,
                                     y,
                                     border_thickness,

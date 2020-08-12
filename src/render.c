@@ -67,7 +67,6 @@ void render_triangle(SDL_Renderer *renderer, int ax, int ay, int bx, int by, int
 
     if (right_angle == top_left)
     {
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         for (int x = x_origo; x < x_max; ++x)
         {
             diff = x - x_origo;
@@ -76,7 +75,6 @@ void render_triangle(SDL_Renderer *renderer, int ax, int ay, int bx, int by, int
     }
     if (right_angle == top_right)
     {
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         for (int x = x_origo; x < x_max; ++x)
         {
             diff = x - x_origo; // Same for x and y
@@ -88,7 +86,6 @@ void render_triangle(SDL_Renderer *renderer, int ax, int ay, int bx, int by, int
     {
         for (int x = x_origo; x < x_max; ++x)
         {
-            SDL_SetRenderDrawColor(renderer, 100, 100, 255, 255);
             diff = x - x_origo;
             SDL_RenderDrawLine(renderer, x, y_max, x, y_origo + diff);
         }
@@ -98,13 +95,53 @@ void render_triangle(SDL_Renderer *renderer, int ax, int ay, int bx, int by, int
     {
         for (int x = x_origo; x < x_max; ++x)
         {
-            SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
             diff = x - x_origo;
             SDL_RenderDrawLine(renderer, x, y_max, x, y_max - diff);
         }
-    }
+    }    
+}
 
+void render_border_corners(SDL_Renderer *renderer, Border border, int border_thickness)
+{
+    Uint8 r, g, b, a;
+
+    // Top border
+    r = border.colors[top].r;
+    g = border.colors[top].g;
+    b = border.colors[top].b;
+    a = border.colors[top].a;
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    render_triangle(renderer,
+                    border.rects[top].x - border_thickness, border.rects[top].y,
+                    border.rects[top].x, border.rects[top].y,
+                    border.rects[top].x, border.rects[top].y + border_thickness,
+                    top_right);
     
+    render_triangle(renderer,
+                    border.rects[top].x + border.rects[top].w, border.rects[top].y,
+                    border.rects[top].x + border.rects[top].w + border_thickness, border.rects[top].y,
+                    border.rects[top].x + border.rects[top].w, border.rects[top].y + border_thickness,
+                    top_left);
+
+    // Bottom border
+    r = border.colors[bottom].r;
+    g = border.colors[bottom].g;
+    b = border.colors[bottom].b;
+    a = border.colors[bottom].a;
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    render_triangle(renderer,
+                    border.rects[bottom].x - border_thickness, border.rects[bottom].y,
+                    border.rects[bottom].x, border.rects[bottom].y,
+                    border.rects[bottom].x, border.rects[bottom].y + border.rects[bottom].h,
+                    bottom_right);
+    
+    render_triangle(renderer,
+                    border.rects[bottom].x + border.rects[bottom].w, border.rects[bottom].y,
+                    border.rects[bottom].x + border.rects[bottom].w + border_thickness, border.rects[bottom].y,
+                    border.rects[bottom].x + border.rects[bottom].w, border.rects[bottom].y + border.rects[bottom].y + border_thickness,
+                    bottom_left);
+    
+                    
 }
 
 void render_button_TTF(SDL_Renderer *renderer, Button_TTF button)
@@ -121,33 +158,13 @@ void render_button_TTF(SDL_Renderer *renderer, Button_TTF button)
                                button.border.colors[i].g,
                                button.border.colors[i].b,
                                button.border.colors[i].a);
-        SDL_RenderFillRect(renderer, &button.border.rects[i]);                               
+        SDL_RenderFillRect(renderer, &button.border.rects[i]);     
+                                
     }
 
+    // Corners
+    render_border_corners(renderer, button.border, 4);
 
-}
-
-void render_button_TTF_bordered(SDL_Renderer *renderer,
-                                Button_TTF_Bordered button,
-                                SDL_Color border_color,
-                                SDL_Color inner_color,
-                                SDL_Rect parent_container_rect)
-{
-    // Border
-    SDL_SetRenderDrawColor(renderer,
-                           border_color.r,
-                           border_color.g,
-                           border_color.b,
-                           border_color.a);
-    SDL_RenderFillRect(renderer, &button.rect);
-
-    // Inner rect
-    SDL_SetRenderDrawColor(renderer,
-                           inner_color.r,
-                           inner_color.g,
-                           inner_color.b,
-                           inner_color.a);
-    SDL_RenderFillRect(renderer, &button.inner_rect);
 }
 
 void render_buttons_TTF(State *state, SDL_Renderer *renderer, Button_TTF buttons[], u_int8_t num_buttons)
@@ -165,27 +182,6 @@ void render_buttons_TTF(State *state, SDL_Renderer *renderer, Button_TTF buttons
             printf("SDL_RenderCopy: %s\n", SDL_GetError());
             SDL_Quit();
         }
-
-        // Text
-        if (SDL_RenderCopy(renderer,
-                           buttons[i].label.texture,
-                           NULL,
-                           &buttons[i].label.rect) < 0)
-        {
-            printf("SDL_RenderCopy: %s\n", SDL_GetError());
-            SDL_Quit();
-        }
-    }
-}
-
-void render_buttons_TTF_bordered(State *state, SDL_Renderer *renderer, Button_TTF_Bordered buttons[], u_int8_t num_buttons)
-{
-    for (int i = 0; i < num_buttons; ++i)
-    {
-        render_button_TTF_bordered(renderer, buttons[i],
-                                             state->buttons_TTF_bordered[i].border_color,
-                                             state->buttons_TTF_bordered[i].rect_color,
-                                             state->containers[buttons[i].parent_container].rect);
 
         // Text
         if (SDL_RenderCopy(renderer,
@@ -236,9 +232,11 @@ void render_GUI(State *state, SDL_Renderer *renderer)
                        state->buttons_TTF,
                        state->GUI.num_buttons);
 
-    render_grid(renderer, state->grid);
+    print_rect(state->buttons_TTF[0].border.rects[top], "top border");
+    print_rect(state->buttons_TTF[0].border.rects[bottom], "bottom border");
+    print_rect(state->buttons_TTF[0].border.rects[left], "left border");
+    print_rect(state->buttons_TTF[0].border.rects[right], "right border");
 
 
 
-    render_triangle(renderer, 0, 0, 40, 40, 0, 40, bottom_left);
 }                           
