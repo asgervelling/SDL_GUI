@@ -105,7 +105,15 @@ void render_border_corners(SDL_Renderer *renderer, Border border, int border_thi
 {
     Uint8 r, g, b, a;
 
+    
     // Top border
+    /*
+    
+        \-------------/
+         \           /
+          \_________/
+
+    */
     r = border.colors[top].r;
     g = border.colors[top].g;
     b = border.colors[top].b;
@@ -122,13 +130,21 @@ void render_border_corners(SDL_Renderer *renderer, Border border, int border_thi
                     border.rects[top].x + border.rects[top].w + border_thickness, border.rects[top].y,
                     border.rects[top].x + border.rects[top].w, border.rects[top].y + border_thickness,
                     top_left);
-
+    
     // Bottom border
+    /*
+      
+      /------------\
+     /              \
+    /________________\
+    
+    */
     r = border.colors[bottom].r;
     g = border.colors[bottom].g;
     b = border.colors[bottom].b;
     a = border.colors[bottom].a;
     SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    
     render_triangle(renderer,
                     border.rects[bottom].x - border_thickness, border.rects[bottom].y,
                     border.rects[bottom].x, border.rects[bottom].y,
@@ -138,7 +154,7 @@ void render_border_corners(SDL_Renderer *renderer, Border border, int border_thi
     render_triangle(renderer,
                     border.rects[bottom].x + border.rects[bottom].w, border.rects[bottom].y,
                     border.rects[bottom].x + border.rects[bottom].w + border_thickness, border.rects[bottom].y,
-                    border.rects[bottom].x + border.rects[bottom].w, border.rects[bottom].y + border.rects[bottom].y + border_thickness,
+                    border.rects[bottom].x + border.rects[bottom].w, border.rects[bottom].y + border_thickness,
                     bottom_left);
     
                     
@@ -146,6 +162,7 @@ void render_border_corners(SDL_Renderer *renderer, Border border, int border_thi
 
 void render_button_TTF(SDL_Renderer *renderer, Button_TTF button)
 {
+    
     // First the actual button
     SDL_SetRenderDrawColor(renderer, button.color.r, button.color.g, button.color.b, button.color.a);
     SDL_RenderFillRect(renderer, &button.rect); 
@@ -161,7 +178,7 @@ void render_button_TTF(SDL_Renderer *renderer, Button_TTF button)
         SDL_RenderFillRect(renderer, &button.border.rects[i]);     
                                 
     }
-
+    
     // Corners
     render_border_corners(renderer, button.border, 4);
 

@@ -143,7 +143,7 @@ void init_GUI(State *state, SDL_Renderer *renderer, int rows, int columns)
 
     // Colors
     state->colors.black = init_color(0, 0, 0, 255);
-    state->colors.grey = init_color(40, 40, 40, 255);
+    state->colors.grey = init_color(150, 150, 150, 255);
     state->colors.white = init_color(255, 255, 255, 255);
     state->colors.blue = init_color(0, 0, 255, 255);
 

@@ -28,14 +28,14 @@ Border init_border(SDL_Rect rect, int border_thickness)
 
     // Colors of the borders
     SDL_Color border_color_0, border_color_1, border_color_2, border_color_3;
-    border_color_0 = init_color(255, 0, 0, 255);
-    border_color_1 = init_color(0, 255, 0, 255);
-    border_color_2 = init_color(0, 0, 255, 255);
-    border_color_3 = init_color(0, 0, 0, 255);
+    border_color_0 = init_color(46, 46, 46, 255);
+    border_color_1 = init_color(181, 181, 181, 255);
+    border_color_2 = init_color(212, 212, 212, 255);
+    border_color_3 = init_color(94, 94, 94, 255);
     border.colors[top] = border_color_0;
-    border.colors[right] = border_color_1;
-    border.colors[bottom] = border_color_2;
-    border.colors[left] = border_color_3;
+    border.colors[bottom] = border_color_1;
+    border.colors[left] = border_color_2;
+    border.colors[right] = border_color_3;
 
     // Dimensions
     int x, y;
@@ -76,11 +76,8 @@ Button_TTF init_button_TTF(State *state, SDL_Renderer *renderer, char text[], u_
     // Colors
     SDL_Color button_color, text_color, text_shadow_color;
     text_color = state->colors.black;
-    text_shadow_color = init_color(0, 0, 0, 40);
-    button_color = init_color(state->containers[parent_container].color.r - 122,
-                            state->containers[parent_container].color.g - 122,
-                            state->containers[parent_container].color.b - 122,
-                            255);
+    text_shadow_color = init_color(0, 0, 0, 80);
+    button_color = state->colors.grey;
     button_TTF.color = button_color;
 
     // Size the buttons according to the number of rows and columns in a container
@@ -110,8 +107,8 @@ Button_TTF init_button_TTF(State *state, SDL_Renderer *renderer, char text[], u_
     button_TTF.label.texture = init_text_texture(state, renderer, text, text_color);
 
     // Text shadow
-    button_TTF.label.rect_shadow = init_rect(x_label + 2,
-                                             y_label + 2,
+    button_TTF.label.rect_shadow = init_rect(x_label + 3,
+                                             y_label + 3,
                                              w_label,
                                              h_label);
     button_TTF.label.texture_shadow = init_text_texture(state, renderer, text, text_shadow_color);                                             
